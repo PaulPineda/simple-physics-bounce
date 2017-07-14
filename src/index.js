@@ -33,24 +33,42 @@ function drawBall(ctx, ball){
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+// ============================================
+// UPDATE THE CANVAS WITH requestAnimationFrame
+// ============================================
+const BALL_POOL = new BallPool();
+
+function frame(){
+
+
+
+  requestAnimationFrame(frame);
+}
+
+
 // ============
 // BALL CLASSES
 // ============
 
-function BallPool(id){
-  this.id = id;
+function BallPool(){
   this.balls = [];
 }
-BallPool.prototype.createBall = function(vector2){
-  this.balls.push(new Ball(vector2));
+BallPool.prototype.createBall = function(x, y){
+  this.balls.push(new Ball(x, y));
 };
 BallPool.prototype.render = function(){
   this.balls.forEach(ball => drawBall(ctx,ball));
 };
+BallPool.prototype.update = function(){
+  this.balls.forEach(ball => {
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+  });
+};
 
-function Ball(origin){
+function Ball(x, y){
   this.col = 'green';
   this.rad = 10;
-  this.x = origin.x;
-  this.y = origin.y;
+  this.x = x;
+  this.y = y;
 }
