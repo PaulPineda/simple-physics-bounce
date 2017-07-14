@@ -1,0 +1,26 @@
+html,body {
+  height: 100;
+  margin: 0;
+  padding: 0;
+  background: grey;
+}
+body {
+  min-width: 400px;
+  max-width: 600px;
+  margin: 0 auto;
+  font: 14px 'Droid Serif',Helvetica;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.fullvh {
+  height: 100vh;
+  text-align: center;
+}
+.fullvh > h1 {
+  padding-top: 20px;
+}
+.content {
+  background: #9E9E9E;
+  border: .1px dashed black;
+}

@@ -4,28 +4,14 @@
   <meta chrset="utf-8">
   <title></title>
   <link rel="icon" href="http://localhost:8080/favicon.ico" />
-  <style>
-    html,body {
-      height: 100;
-      margin: 0;
-      paddng: 0;
-      background: grey;
-    }
-    body{
-      min-width: 300px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .fullvh {
-      height: 100vh;
-      text-align: center;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet">
+  <link href="index.css" rel="stylesheet">
 </head>
 <body>
   <section class="fullvh">
     <h1>Title</h1>
-    <p>Description</p>
+    <p>Click within the dotted area to create a bouncing ball:</p>
+    <canvas id="canvas" class="content" width="400px"; height="400px"></canvas>
   </section>
   <script src="dist/bundle.js" type="text/javascript"></script>
 </body>
