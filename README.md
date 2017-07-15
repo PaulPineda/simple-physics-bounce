@@ -1,30 +1,23 @@
-# Barebones Boilerplate
+# Simple physics engine
 
-Installs the following as devDepandancies:
-- webpack
-- webpack-dev-server
+##This is a simple demo of rigidbody physics.
 
-- babel-core
-- babel-loader
-- babel-preset-es2015
-- babel-preset-stage-2
+##Clicking within the dotted bordered canvas area creates a ball object that bounces within the dotted border until it comes to rest.
 
-- mocha
-- chai
+###The following values can be adjusted to create different environments:
 
-- eslint
-- eslint-plugin-html
+**defaultVx/defaultVy**
+_(Default for both is 1000)_
+These represent the x and y speed range used as the initial values (the defaults for both are 1000)
 
-Creates the following folder structure:
-|- .git
-|- /node\_modules/
-|- /src/
-|  |- index.js
-|- .babelrc
-|- /eslintignore
-|- .eslintrc
-|- favicon.ico
-|- README.md
-|- index.html
-|- package.json
-|- webpack.config.babel.js
+**maxFps**
+_(Default: 1/60)_
+The maximum elapsed time used to calculate the updated Ball position
+
+**gravity**
+_Default: 9.8_
+The value for gravity
+
+**friction**
+_Default: 0.7_
+The value used to reduce the speed of the rigid body when it bounces off the canvas borders

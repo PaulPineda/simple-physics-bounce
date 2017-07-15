@@ -40,6 +40,8 @@ const BALL_POOL = new BallPool();
 const maxFps = 1/60;
 const gravity = 9.8;
 const friction = 0.7;
+const defaultVx = 1000;
+const defaultVy = 1000;
 
 /**
  * Function that handles UPDATE and RENDER of rigidbodies within canvas.
@@ -135,8 +137,8 @@ function Ball(x, y){
   this.rad = 10;
   this.x = x;
   this.y = y;
-  this.vx = randomVector(1000);
-  this.vy = randomVector(1000);
+  this.vx = randomVector(defaultVx);
+  this.vy = randomVector(defaultVy);
 }
 
 /**
