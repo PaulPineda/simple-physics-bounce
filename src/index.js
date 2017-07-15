@@ -38,7 +38,7 @@ const ctx = canvas.getContext('2d');
 let previousTime = performance.now();
 const maxFps = 1/60;
 
-const gravity = 9.8*maxFps*10;
+const gravity = 9.8*maxFps;
 const friction = 0.9;
 const BALL_POOL = new BallPool();
 
@@ -77,8 +77,11 @@ BallPool.prototype.update = function(dt){
     const futureX = ball.x + ball.vx;
     const futureY = ball.y + ball.vy;
 
+    if((futureX < ball.rad) || (futureX > maxX))
+      ball.vx = -ball.vx * friction;
+
     if((futureY < ball.rad) || (futureY > maxY))
-      ball.vy = -(ball.vy);
+      ball.vy = -ball.vy * friction;
 
 
     // add gravity
@@ -100,8 +103,14 @@ function Ball(x, y){
   this.rad = 10;
   this.x = x;
   this.y = y;
-  this.vx = 0;
-  this.vy = 1;
+  this.vx = randomVector();
+  this.vy = randomVector();
+}
+
+function randomVector(){
+  var rand = Math.random();
+  return (rand < 0.5) ? -Math.random():Math.random();
+
 }
 
 function constrainCoord(val, min, max){
