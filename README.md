@@ -1,10 +1,10 @@
 # Simple physics engine
 
-##This is a simple demo of rigidbody physics.
+## This is a simple demo of rigidbody physics.
 
-##Clicking within the dotted bordered canvas area creates a ball object that bounces within the dotted border until it comes to rest.
+## Clicking within the dotted bordered canvas area creates a ball object that bounces within the dotted border until it comes to rest.
 
-###The following values can be adjusted to create different environments:
+### The following values can be adjusted to create different environments:
 
 **defaultVx/defaultVy**
 _(Default for both is 1000)_
