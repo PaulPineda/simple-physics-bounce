@@ -1,8 +1,21 @@
 # Simple physics engine
 
-## This is a simple demo of rigidbody physics.
+This is a simple demo of rigidbody physics.
 
-## Clicking within the dotted bordered canvas area creates a ball object that bounces within the dotted border until it comes to rest.
+Clicking within the dotted bordered canvas area creates a ball object that bounces within the dotted border until it comes to rest.
+
+---
+
+### Testing:
+This is just a regular npm package so once cloned, run:
+
+`npm install && npm run dev`
+
+### Minification:
+Once cloned and the dependencies have been installed you can create a minified version by running:
+`npm run build`
+
+---
 
 ### The following values can be adjusted to create different environments:
 
