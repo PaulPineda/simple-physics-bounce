@@ -4,16 +4,21 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
+  // SET UP EVENT HANDLERS
   document.body.addEventListener('click', e => {
     if(e.target && e.target.nodeName === 'CANVAS'){
       BALL_POOL.createBall(e.offsetX, e.offsetY);
     }
   });
+
   document.body.addEventListener('touchEnd', e => {
     if(e.target && e.target.nodeName === 'CANVAS')
       BALL_POOL.createBall(e.offsetX, e.offsetY);
   });
+
+  // START requestAnimationFrame LOOP
   frame();
+  
 }, false);
 
 function drawBall(ctx, ball){
@@ -26,7 +31,7 @@ function drawBall(ctx, ball){
 }
 
 // ==================================
-// CREATE CANVAS CONTEXT TO DRAW ONTO
+// GET CANVAS CONTEXT TO DRAW ONTO
 // ==================================
 
 const canvas = document.getElementById('canvas');
@@ -38,31 +43,31 @@ const ctx = canvas.getContext('2d');
 let previousTime = performance.now();
 const maxFps = 1/60;
 
-const gravity = 9.8*maxFps;
+const gravity = 9.8;
 const friction = 0.9;
 const BALL_POOL = new BallPool();
 
 
 
-function frame(){
-  // work out the time elapsed
+function frame(previousTime){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
   const currentTime = performance.now();
   const deltaTime =  Math.min(maxFps, (currentTime - previousTime) / 1000);
 
-  //console.log(deltaTime);
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  BALL_POOL.update(deltaTime);
+  // update the data for the Balls passing in deltaTime
+  BALL_POOL.update(deltaTime, canvas);
+  // render the updated values to canvas context
   BALL_POOL.render();
 
-  previousTime = currentTime;
+
   requestAnimationFrame(frame);
 }
 
 
-// ============
-// BALL CLASSES
-// ============
+// ==============================================================
+// BALL POOL IS AN OBJECT THAT CONTAINS AN ARRAY OF CREATED BALLS
+// ==============================================================
 
 function BallPool(){
   this.balls = [];
@@ -70,12 +75,12 @@ function BallPool(){
 BallPool.prototype.createBall = function(x, y){
   this.balls.push(new Ball(x, y));
 };
-BallPool.prototype.update = function(dt){
+BallPool.prototype.update = function(dt, canvas){
   this.balls.forEach(ball => {
     const maxX = canvas.width- ball.rad;
     const maxY = canvas.height- ball.rad;
-    const futureX = ball.x + ball.vx;
-    const futureY = ball.y + ball.vy;
+    const futureX = ball.x + ball.vx * dt;
+    const futureY = ball.y + ball.vy * dt;
 
     if((futureX < ball.rad) || (futureX > maxX))
       ball.vx = -ball.vx * friction;
@@ -87,8 +92,8 @@ BallPool.prototype.update = function(dt){
     // add gravity
     ball.vy += gravity;
 
-    ball.x += ball.vx;
-    ball.y += ball.vy;
+    ball.x += ball.vx * dt;
+    ball.y += ball.vy * dt;
 
     ball.x = constrainCoord(ball.x, 0, maxX);
     ball.y = constrainCoord(ball.y, 0, maxY);
@@ -98,18 +103,26 @@ BallPool.prototype.render = function(){
   this.balls.forEach(ball => drawBall(ctx,ball));
 };
 
+// ==============================================================
+// BALL CLASS
+// ==============================================================
 function Ball(x, y){
   this.col = 'green';
   this.rad = 10;
   this.x = x;
   this.y = y;
-  this.vx = randomVector();
-  this.vy = randomVector();
+  this.vx = randomVector(100);
+  this.vy = randomVector(500);
 }
 
-function randomVector(){
-  var rand = Math.random();
-  return (rand < 0.5) ? -Math.random():Math.random();
+
+// ==============================================================
+// HELPER FUNCTIONS
+// ==============================================================
+function randomVector(maxSpeed){
+  const rand = Math.random();
+  const res = Math.random()*maxSpeed;
+  return (rand < 0.5) ? -res:res;
 
 }
 
