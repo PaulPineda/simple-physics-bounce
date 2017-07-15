@@ -7,15 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', e => {
     if(e.target && e.target.nodeName === 'CANVAS'){
       BALL_POOL.createBall(e.offsetX, e.offsetY);
-
-      if(BALL_POOL.balls)
-        frame();
     }
   });
   document.body.addEventListener('touchEnd', e => {
     if(e.target && e.target.nodeName === 'CANVAS')
       BALL_POOL.createBall(e.offsetX, e.offsetY);
   });
+  frame();
 }, false);
 
 function drawBall(ctx, ball){
@@ -37,14 +35,27 @@ const ctx = canvas.getContext('2d');
 // ============================================
 // UPDATE THE CANVAS WITH requestAnimationFrame
 // ============================================
-const gravity = 9.8;
+let previousTime = performance.now();
+const maxFps = 1/60;
+
+const gravity = 9.8*maxFps*10;
 const friction = 0.9;
 const BALL_POOL = new BallPool();
 
+
+
 function frame(){
-  ctx.clearRect(0,0,400,400);
-  BALL_POOL.update();
+  // work out the time elapsed
+  const currentTime = performance.now();
+  const deltaTime =  Math.min(maxFps, (currentTime - previousTime) / 1000);
+
+  //console.log(deltaTime);
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  BALL_POOL.update(deltaTime);
   BALL_POOL.render();
+
+  previousTime = currentTime;
   requestAnimationFrame(frame);
 }
 
@@ -61,19 +72,23 @@ BallPool.prototype.createBall = function(x, y){
 };
 BallPool.prototype.update = function(dt){
   this.balls.forEach(ball => {
-    ball.x = ball.vx * dt;
-    ball.y = ball.vy * dt;
+    const maxX = canvas.width- ball.rad;
+    const maxY = canvas.height- ball.rad;
+    const futureX = ball.x + ball.vx;
+    const futureY = ball.y + ball.vy;
 
-    const overflowX = canvas.width - ball.x - ball.rad;
-    const overflowY = canvas.height - ball.y - ball.rad;
-    if(overflowY < 0){
-      ball.y = canvas.height + overflowY;
-      ball.vy = overflowY * friction;
-    }
-    if(ball.y < ball.rad){
-      ball.y = -ball.y
-      ball.vy =  ball.vy * friction;
-    }
+    if((futureY < ball.rad) || (futureY > maxY))
+      ball.vy = -(ball.vy);
+
+
+    // add gravity
+    ball.vy += gravity;
+
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    ball.x = constrainCoord(ball.x, 0, maxX);
+    ball.y = constrainCoord(ball.y, 0, maxY);
   });
 };
 BallPool.prototype.render = function(){
@@ -87,5 +102,8 @@ function Ball(x, y){
   this.y = y;
   this.vx = 0;
   this.vy = 1;
-  console.log('NEW BALL V:',this.vx,this.vy);
+}
+
+function constrainCoord(val, min, max){
+  return Math.max(min, Math.min(val, max));
 }
