@@ -1,4 +1,5 @@
-import BallPool from './BallPool.js';
+import Pool from './ObjectPool.js';
+import Ball from './Ball.js';
 
 
 // < SIDE EFFECTS
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Get reference to canvas and context
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const BALL_POOL = new BallPool(ctx);
+const BALL_POOL = new Pool(Ball);
 
 // Set up physics constants
 const maxFps = 1/60;
