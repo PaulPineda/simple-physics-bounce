@@ -1,4 +1,4 @@
-import {randomVector} from './helperFn.js';
+import { randomVector, constrainCoord } from './helperFn.js';
 
 /**
  * Represent a rigidbody ball object
@@ -27,7 +27,34 @@ function Ball(x, y, vx, vy, ctx){
  * Renders Ball instance to canvas context
  * @function frame
  */
-Ball.prototype.drawBall = function(){
+Ball.prototype.update = function(dt, canvas, gravity, friction){
+  const maxX = canvas.width- this.rad;
+  const maxY = canvas.height- this.rad;
+  const futureX = this.x + this.vx * dt;
+  const futureY = this.y + this.vy * dt;
+
+  if((futureX < this.rad) || (futureX > maxX))
+    this.vx = -this.vx * friction;
+
+  if((futureY < this.rad) || (futureY > maxY))
+    this.vy = -this.vy * friction;
+
+
+  // add gravity
+  this.vy += gravity;
+
+  this.x += this.vx * dt;
+  this.y += this.vy * dt;
+
+  this.x = constrainCoord(this.x, 0, maxX);
+  this.y = constrainCoord(this.y, 0, maxY);
+};
+
+/**
+ * Renders Ball instance to canvas context
+ * @function frame
+ */
+Ball.prototype.render = function(){
   this.ctx.beginPath();
   this.ctx.fillStyle = this.col;
   this.ctx.fill();

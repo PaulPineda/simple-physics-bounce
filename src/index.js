@@ -1,29 +1,27 @@
 import Pool from './ObjectPool.js';
 import Ball from './Ball.js';
 
+// Get reference to canvas and context
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const BALL_POOL = new Pool(Ball);
 
-// < SIDE EFFECTS
+
+// assign event listeners when DOM has loaded
 document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', e => {
     if(e.target && e.target.nodeName === 'CANVAS'){
-      BALL_POOL.createBall(e.offsetX, e.offsetY, defaultVx, defaultVy, ctx);
+      BALL_POOL.add(new Ball(e.offsetX, e.offsetY, defaultVx, defaultVy, ctx));
     }
   });
   document.body.addEventListener('touchEnd', e => {
     if(e.target && e.target.nodeName === 'CANVAS')
-      BALL_POOL.createBall(e.offsetX, e.offsetY, defaultVx, defaultVy, ctx);
+      BALL_POOL.add(new Ball(e.offsetX, e.offsetY, defaultVx, defaultVy, ctx));
   });
 
   requestAnimationFrame(frame);
 }, false);
 
-// SIDE EFFECTS >
-
-
-// Get reference to canvas and context
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const BALL_POOL = new Pool(Ball);
 
 // Set up physics constants
 const maxFps = 1/60;
@@ -31,7 +29,6 @@ const gravity = 9.8;
 const friction = 0.7;
 const defaultVx = 1000;
 const defaultVy = 1000;
-
 /**
  * Function that handles UPDATE and RENDER of rigidbodies within canvas.
  * It should be invoked by requestAnimationFrame only

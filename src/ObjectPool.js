@@ -1,5 +1,3 @@
-import {constrainCoord} from './helperFn.js';
-
 /**
  * Class object that handles ball creation, updating and rendering
  * @class ObjectPool
@@ -11,42 +9,25 @@ function ObjectPool(objectConstructorFn){
 }
 
 /**
- * creates a new instance of Ball and pushes it to the balls array
+ * adds a new instance of item to pool
  * @memberof ObjectPool
- * @param {number} x             - initial x position of Ball
-* @param {number} y              - initial y position of Ball
+ * @param {item} x             - item object to store in pool
  */
-ObjectPool.prototype.createBall = function(x, y, vx, vy, ctx){
-  this.pool.push(new this.constr(x, y, vx, vy, ctx));
+ObjectPool.prototype.add = function(item){
+  this.pool.push(item);
 };
 /**
- * Updates the current state of the ball, specifically it's vector and position properties
+ * Iterates through this.pool, calls a method 'update' on each item applying any passed args
  * @memberof ObjectPool
- * @param {number} dt             - deltaTime
- * @param {HTMLElement} canvas    - reference to the canvas element
  */
-ObjectPool.prototype.update = function(dt, canvas, gravity, friction){
+ObjectPool.prototype.update = function(){
+  // any arguments after 1st will be considered as params for callback
+  var args = [].slice.call(arguments, 0);
+
   this.pool.forEach(item => {
-    const maxX = canvas.width- item.rad;
-    const maxY = canvas.height- item.rad;
-    const futureX = item.x + item.vx * dt;
-    const futureY = item.y + item.vy * dt;
 
-    if((futureX < item.rad) || (futureX > maxX))
-      item.vx = -item.vx * friction;
+    item.update.apply(item, args);
 
-    if((futureY < item.rad) || (futureY > maxY))
-      item.vy = -item.vy * friction;
-
-
-    // add gravity
-    item.vy += gravity;
-
-    item.x += item.vx * dt;
-    item.y += item.vy * dt;
-
-    item.x = constrainCoord(item.x, 0, maxX);
-    item.y = constrainCoord(item.y, 0, maxY);
   });
 };
 /**
@@ -54,7 +35,7 @@ ObjectPool.prototype.update = function(dt, canvas, gravity, friction){
  * @memberof ObjectPool
  */
 ObjectPool.prototype.render = function(){
-  this.pool.forEach(item => item.drawBall());
+  this.pool.forEach(item => item.render());
 };
 
 export default ObjectPool;
